@@ -27,6 +27,66 @@
       <summary class="flex cursor-pointer list-none items-start gap-2.5 rounded-xl p-4 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#bc8540] md:items-baseline md:gap-3.5 md:px-[22px] md:py-[18px] [&::-webkit-details-marker]:hidden">
         <span aria-hidden="true" class="text-[1.3rem] leading-none font-bold text-[#bc8540] group-open:hidden">+</span>
         <span aria-hidden="true" class="hidden text-[1.3rem] leading-none font-bold text-[#bc8540] group-open:inline">−</span>
+        <span class="min-w-0 text-xl leading-[1.3] font-bold text-[#202c29]" role="heading" aria-level="2">Especificación de requisitos</span>
+        <span class="hidden text-[0.92rem] text-[#64716c] md:block">Información que debe almacenarse y reglas del negocio.</span>
+      </summary>
+      <h3 class="mb-2 text-[1.12rem] font-bold text-[#245c49]">2.1. Requisitos de información (datos a almacenar)</h3>
+      <ul class="mb-6 list-disc space-y-2 pl-6 text-[#64716c]">
+        <li><strong>Participantes:</strong> registrar un identificador único, nombre, primer apellido, segundo apellido y teléfono móvil. Distinguir qué participantes son actores o actrices, técnicos o ambas cosas.</li>
+        <li><strong>Actores, personajes y capacidades:</strong> registrar los personajes de la obra y sus características; identificar qué personajes puede interpretar cada actor o actriz; permitir que un mismo personaje tenga diferentes intérpretes según la representación y que una persona interprete varios personajes.</li>
+        <li><strong>Técnicos y especialidades:</strong> registrar las especialidades técnicas (vestuario, regiduría, luces y sonido); identificar las especialidades que puede desempeñar cada técnico y permitir que una persona tenga varias especialidades.</li>
+        <li><strong>Ensayos y escenas:</strong> registrar la fecha, hora, tipo, lugar y observaciones de cada ensayo; registrar las escenas de la obra, su número, título, descripción y duración estimada; identificar las escenas previstas para cada ensayo.</li>
+        <li><strong>Convocatorias:</strong> registrar qué actores y actrices están convocados a cada ensayo, qué personaje deben preparar y sus estados de asistencia y sustituciones; registrar qué técnicos están convocados y qué especialidad desempeñarán.</li>
+        <li><strong>Representaciones:</strong> registrar la fecha, hora, lugar y observaciones de cada representación; identificar qué actor interpreta cada personaje en cada función, permitiendo varios personajes por actor; y registrar los técnicos y sus especialidades asignadas, como máximo una especialidad técnica por técnico y representación. Una especialidad puede estar cubierta por varios técnicos y una persona puede desempeñar simultáneamente un papel artístico y una función técnica.</li>
+      </ul>
+
+      <h3 class="mb-2 text-[1.12rem] font-bold text-[#245c49]">2.2. Reglas de negocio (restricciones y funcionamiento)</h3>
+      <div class="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-2">
+        <article class="rounded-xl border border-[#dce1d8] bg-[#fffefa] p-4">
+          <h4 class="mb-2 font-bold text-[#245c49]">Participantes y capacidades</h4>
+          <ol class="list-decimal space-y-2 pl-5 text-[#64716c]">
+            <li>Todo participante debe pertenecer al menos a uno de los subtipos ACTORES_ACTRICES o TECNICOS y puede pertenecer a ambos: la especialización es <strong>total y solapada</strong>. Es una restricción de negocio; las claves foráneas por sí solas no garantizan que cada participante pertenezca a algún subtipo.</li>
+            <li>Los datos personales se almacenan una sola vez en <code class="rounded bg-[#edf0e9] px-[5px] py-0.5 font-mono text-[0.9em] text-[#284c3c]">PARTICIPANTES</code>.</li>
+            <li>Un actor puede interpretar varios personajes y un personaje puede ser interpretado por varios actores a lo largo de la temporada. Relación N:M.</li>
+            <li>Un técnico puede tener varias especialidades registradas como capacidades y una especialidad puede corresponder a varios técnicos. Relación N:M.</li>
+            <li>Solo se puede convocar o asignar a un actor para personajes registrados entre sus capacidades.</li>
+            <li>Solo se puede convocar o asignar a un técnico para especialidades registradas entre sus capacidades.</li>
+          </ol>
+        </article>
+        <article class="rounded-xl border border-[#dce1d8] bg-[#fffefa] p-4">
+          <h4 class="mb-2 font-bold text-[#245c49]">Ensayos y convocatorias</h4>
+          <ol class="list-decimal space-y-2 pl-5 text-[#64716c]" start="7">
+            <li>Cada convocatoria artística identifica obligatoriamente un ensayo, un actor y un personaje.</li>
+            <li>Cada convocatoria técnica identifica un ensayo, un técnico y una especialidad.</li>
+            <li>Cuando un actor convocado no puede asistir a un ensayo, se conserva su convocatoria con estado ausente y puede registrarse un único sustituto autorizado para interpretar ese personaje.</li>
+            <li>Un ensayo puede incluir varias escenas y una escena puede ensayarse en diferentes fechas. Relación N:M.</li>
+            <li>Una misma escena puede repetirse durante un ensayo sin registrar cada repetición.</li>
+            <li>Las convocatorias de ensayos son independientes de los repartos de las representaciones.</li>
+            <li>Los ensayos y las representaciones pueden registrarse antes de completar sus convocatorias o repartos.</li>
+          </ol>
+        </article>
+        <article class="rounded-xl border border-[#dce1d8] bg-[#fffefa] p-4">
+          <h4 class="mb-2 font-bold text-[#245c49]">Representaciones</h4>
+          <ol class="list-decimal space-y-2 pl-5 text-[#64716c]" start="14">
+            <li>Cada personaje tiene un único intérprete por representación; un actor puede interpretar varios personajes en la misma representación.</li>
+            <li>Los repartos artísticos pueden variar entre representaciones.</li>
+            <li>Cada técnico puede desempeñar como máximo una especialidad técnica en una representación, aunque tenga varias registradas como capacidades. Una misma especialidad puede estar cubierta por varios técnicos en esa representación.</li>
+            <li>Una persona puede desempeñar simultáneamente un papel artístico y una función técnica en la misma representación.</li>
+          </ol>
+        </article>
+        <article class="rounded-xl border border-[#dce1d8] bg-[#fffefa] p-4">
+          <h4 class="mb-2 font-bold text-[#245c49]">Integridad y ausencia de duplicidades</h4>
+          <ol class="list-decimal space-y-2 pl-5 text-[#64716c]" start="18">
+            <li>No se duplicarán datos personales, nombres de personajes ni descripciones de especialidades en las tablas de asignación.</li>
+          </ol>
+        </article>
+      </div>
+    </details>
+
+    <details class="group mb-3 min-w-0 rounded-[14px] border border-[#dce1d8] bg-[#fffefa] shadow-[0_16px_40px_rgb(34_49_41/0.08)] [&>:not(summary)]:mx-4 [&>:last-child]:mb-4 [&>summary+*]:mt-5 md:[&>:not(summary)]:mx-6 md:[&>:last-child]:mb-6">
+      <summary class="flex cursor-pointer list-none items-start gap-2.5 rounded-xl p-4 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#bc8540] md:items-baseline md:gap-3.5 md:px-[22px] md:py-[18px] [&::-webkit-details-marker]:hidden">
+        <span aria-hidden="true" class="text-[1.3rem] leading-none font-bold text-[#bc8540] group-open:hidden">+</span>
+        <span aria-hidden="true" class="hidden text-[1.3rem] leading-none font-bold text-[#bc8540] group-open:inline">−</span>
         <span class="min-w-0 text-xl leading-[1.3] font-bold text-[#202c29]" role="heading" aria-level="2">Diagrama Entidad-Relación lógico</span>
         <span class="hidden text-[0.92rem] text-[#64716c] md:block">Personas, personajes, técnicos, ensayos, funciones y reparto.</span>
       </summary>
@@ -102,7 +162,7 @@
           <figcaption class="mb-3 font-bold text-[#245c49]">2. Ensayos, convocatorias y escenas</figcaption>
           <svg class="block h-auto w-full min-w-[960px] font-[Segoe_UI,Arial,sans-serif]" viewBox="0 0 1000 640" role="img" aria-labelledby="ensayos-title ensayos-desc">
             <title id="ensayos-title">Planificación independiente de los ensayos</title>
-            <desc id="ensayos-desc">ENSAYOS se relaciona de uno a cero o muchas filas con CONVOCATORIAS_ACTORES, CONVOCATORIAS_TECNICOS y ENSAYOS_ESCENAS. Cada convocatoria tiene exactamente un actor y un personaje, o un técnico y una especialidad. Cada fila de ENSAYOS_ESCENAS tiene exactamente una escena. Cada entidad de referencia puede aparecer en cero o muchas asignaciones. No hay relación directa con representaciones.</desc>
+            <desc id="ensayos-desc">ENSAYOS se relaciona de uno a cero o muchas filas con CONVOCATORIAS_ACTORES, CONVOCATORIAS_TECNICOS y ENSAYOS_ESCENAS. Cada convocatoria tiene exactamente un actor y un personaje, o un técnico y una especialidad. CONVOCATORIAS_ACTORES registra estado_asistencia e id_sustituto opcional, con como máximo un sustituto autorizado por convocatoria. Cada fila de ENSAYOS_ESCENAS tiene exactamente una escena. Cada entidad de referencia puede aparecer en cero o muchas asignaciones. No hay relación directa con representaciones.</desc>
             <path class="fill-none stroke-[#bc8540] stroke-[2.5]" d="M260 230 H300 V90 H380 M260 280 H380 M260 330 H300 V510 H380"></path>
             <path class="fill-none stroke-[#bc8540] stroke-[2.5]" d="M660 55 L760 45 M660 125 L760 160 M660 275 L760 265 M660 345 L760 380 M660 510 H760"></path>
             <text class="fill-[#245c49] text-[13px] font-bold" x="270" y="220">1</text>
@@ -130,12 +190,14 @@
               <text class="fill-[#202c29] text-[14px]" x="16" y="136">lugar · observaciones</text>
             </g>
             <g transform="translate(380 20)">
-              <rect class="fill-[#f0e9f6] stroke-[#aa91ba] stroke-2" width="280" height="150" rx="10"></rect>
+              <rect class="fill-[#f0e9f6] stroke-[#aa91ba] stroke-2" width="280" height="205" rx="10"></rect>
               <text class="fill-[#245c49] text-[16px] font-bold" x="16" y="28">CONVOCATORIAS_ACTORES</text>
               <text class="fill-[#245c49] text-[14px] font-bold" x="16" y="55">PK, FK  id_ensayo</text>
               <text class="fill-[#245c49] text-[14px] font-bold" x="16" y="80">PK, FK  id_participante</text>
               <text class="fill-[#245c49] text-[14px] font-bold" x="16" y="105">PK, FK  id_personaje</text>
-              <text class="fill-[#202c29] text-[14px]" x="16" y="132">observaciones</text>
+              <text class="fill-[#202c29] text-[14px]" x="16" y="130">observaciones</text>
+              <text class="fill-[#202c29] text-[14px]" x="16" y="155">estado_asistencia</text>
+              <text class="fill-[#202c29] text-[14px]" x="16" y="180">id_sustituto (FK+, NULL)</text>
             </g>
             <g transform="translate(380 240)">
               <rect class="fill-[#f0e9f6] stroke-[#aa91ba] stroke-2" width="280" height="150" rx="10"></rect>
@@ -185,7 +247,7 @@
           <figcaption class="mb-3 font-bold text-[#245c49]">3. Representaciones y repartos</figcaption>
           <svg class="block h-auto w-full min-w-[960px] font-[Segoe_UI,Arial,sans-serif]" viewBox="0 0 1000 560" role="img" aria-labelledby="repartos-title repartos-desc">
             <title id="repartos-title">Asignaciones de cada representación</title>
-            <desc id="repartos-desc">Una representación tiene cero o muchas asignaciones artísticas y técnicas. Cada reparto referencia exactamente una representación, un actor y un personaje. Cada reparto técnico referencia exactamente una representación, un técnico y una especialidad. Cada actor, personaje, técnico y especialidad puede aparecer en cero o muchas asignaciones.</desc>
+            <desc id="repartos-desc">Una representación tiene cero o muchas asignaciones artísticas y técnicas. Cada reparto referencia exactamente una representación, un actor y un personaje. Cada reparto técnico referencia exactamente una representación, un técnico y una especialidad. La restricción UNIQUE(id_representacion, id_participante) permite como máximo una especialidad técnica por técnico y representación; una misma especialidad puede corresponder a varios técnicos. Una persona puede tener asignaciones artísticas y técnicas simultáneas. Cada actor, personaje, técnico y especialidad puede aparecer en cero o muchas asignaciones.</desc>
             <path class="fill-none stroke-[#bc8540] stroke-[2.5]" d="M270 235 H310 V100 H380 M270 290 H310 V430 H380"></path>
             <path class="fill-none stroke-[#bc8540] stroke-[2.5]" d="M660 65 L760 45 M660 135 L760 165 M660 395 L760 375 M660 465 L760 495"></path>
             <text class="fill-[#245c49] text-[13px] font-bold" x="280" y="225">1</text>
@@ -216,12 +278,13 @@
               <text class="fill-[#202c29] text-[14px]" x="16" y="132">observaciones</text>
             </g>
             <g transform="translate(380 360)">
-              <rect class="fill-[#f0e9f6] stroke-[#aa91ba] stroke-2" width="280" height="150" rx="10"></rect>
+              <rect class="fill-[#f0e9f6] stroke-[#aa91ba] stroke-2" width="280" height="180" rx="10"></rect>
               <text class="fill-[#245c49] text-[16px] font-bold" x="16" y="28">REPARTOS_TECNICOS</text>
               <text class="fill-[#245c49] text-[14px] font-bold" x="16" y="55">PK, FK  id_representacion</text>
               <text class="fill-[#245c49] text-[14px] font-bold" x="16" y="80">PK, FK  id_participante</text>
               <text class="fill-[#245c49] text-[14px] font-bold" x="16" y="105">PK, FK  id_especialidad</text>
               <text class="fill-[#202c29] text-[14px]" x="16" y="132">observaciones</text>
+              <text class="fill-[#245c49] text-[11px] font-bold" x="16" y="157">UNIQUE (id_representacion, id_participante)</text>
             </g>
             <g transform="translate(760 10)">
               <rect class="fill-[#e8f1eb] stroke-[#9cafa2] stroke-2" width="230" height="70" rx="10"></rect>
@@ -247,7 +310,8 @@
         </figure>
         <p class="mt-3.5 text-[0.9rem] text-[#64716c]"><strong>PK</strong>: clave primaria; las columnas marcadas PK en una misma caja forman una única clave compuesta. <strong>FK</strong>: clave foránea. <strong>UK</strong>: clave única. Cajas verdes: subtipos; moradas: asociaciones.</p>
         <p class="mt-3.5 text-[0.9rem] text-[#64716c]"><strong>Regla de capacidades:</strong> las parejas actor–personaje y técnico–especialidad de convocatorias y repartos deben existir en ACTORES_PERSONAJES y TECNICOS_ESPECIALIDADES. Esta condición se expresa mediante FK compuestas en el modelo relacional.</p>
-        <p class="mt-3.5 text-[0.9rem] text-[#64716c]"><strong>Reglas teatrales:</strong> un personaje tiene un solo intérprete por representación; un actor puede interpretar varios personajes. Puede haber varios técnicos por especialidad. Luces y sonido suelen tener uno, pero no se prohíben excepciones. Los ensayos no se vinculan directamente con representaciones y no se registran repeticiones ni orden de intervención.</p>
+        <p class="mt-3.5 text-[0.9rem] text-[#64716c]"><strong>Sustituciones en ensayos:</strong> CONVOCATORIAS_ACTORES conserva la convocatoria original y registra estado_asistencia e id_sustituto, que es opcional (0..1 por convocatoria). La FK compuesta (id_sustituto, id_personaje) referencia ACTORES_PERSONAJES y garantiza que el sustituto está autorizado para ese personaje.</p>
+        <p class="mt-3.5 text-[0.9rem] text-[#64716c]"><strong>Reglas teatrales:</strong> un personaje tiene un solo intérprete por representación; un actor puede interpretar varios personajes en la misma función. Cada técnico puede ejercer una sola especialidad en una representación, aunque tenga varias capacidades; una especialidad puede asignarse a varios técnicos. Una misma persona puede tener a la vez un reparto artístico y una asignación técnica. Luces y sonido suelen tener un técnico, pero no se prohíben excepciones. Los ensayos no se vinculan directamente con representaciones y no se registran repeticiones ni orden de intervención.</p>
       </div>
     </details>
 
@@ -258,7 +322,7 @@
         <span class="min-w-0 text-xl leading-[1.3] font-bold text-[#202c29]" role="heading" aria-level="2">Modelo relacional</span>
         <span class="hidden text-[0.92rem] text-[#64716c] md:block">Tablas, atributos y claves.</span>
       </summary>
-      <p class="mb-4 max-w-[760px] text-[#64716c]">Todas las referencias son obligatorias. Las claves primarias compuestas impiden duplicar asignaciones idénticas, sin añadir un UNIQUE equivalente.</p>
+      <p class="mb-4 max-w-[760px] text-[#64716c]">Todas las referencias son obligatorias salvo la FK compuesta opcional de id_sustituto en CONVOCATORIAS_ACTORES. Las claves primarias compuestas impiden duplicar asignaciones idénticas, sin añadir un UNIQUE equivalente.</p>
       <p class="mb-4 max-w-[760px] text-[#64716c]">Cada tarjeta representa una tabla. <strong>PK</strong> indica una clave primaria; <strong>PK+</strong> marca las columnas de una clave primaria compuesta; <strong>FK</strong> identifica una clave foránea y <strong>FK+</strong> las columnas que forman conjuntamente una FK compuesta. Las referencias se muestran debajo de cada esquema.</p>
       <div class="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-2">
         <article class="min-w-0 overflow-hidden rounded-xl border border-[#dce1d8] bg-[#fffefa]">
@@ -366,13 +430,24 @@ donde
     id_ensayo PK+, FK,
     id_participante PK+, FK+,
     id_personaje PK+, FK+,
-    observaciones
+    observaciones,
+    estado_asistencia VARCHAR(20) NOT NULL DEFAULT 'prevista',
+    id_sustituto INT NULL (FK+)
 )
 
-donde
+ donde
     {id_ensayo} referencia ENSAYOS
     {id_participante, id_personaje}
-        referencia ACTORES_PERSONAJES</code></pre>
+        referencia ACTORES_PERSONAJES
+    {id_sustituto, id_personaje}
+        referencia ACTORES_PERSONAJES
+
+restricciones de negocio
+    estado_asistencia: prevista, asistio o ausente
+    si id_sustituto no es NULL, estado_asistencia = ausente
+    si id_sustituto no es NULL, id_sustituto <> id_participante
+    id_sustituto es opcional: NULL o un único actor por convocatoria (0..1)
+    se referencian identificadores; no se duplican nombres ni datos personales</code></pre>
         </article>
         <article class="min-w-0 overflow-hidden rounded-xl border border-[#dce1d8] bg-[#fffefa]">
           <h3 class="border-b border-[#dce1d8] bg-[#f3f6f8] px-4 py-3 font-mono text-[0.95rem] font-bold">12. CONVOCATORIAS_TECNICOS</h3>
@@ -418,7 +493,8 @@ donde
     id_representacion PK+, FK,
     id_participante PK+, FK+,
     id_especialidad PK+, FK+,
-    observaciones
+    observaciones,
+    UNIQUE (id_representacion, id_participante)
 )
 
 donde
@@ -444,15 +520,15 @@ donde
       <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <article class="border-t-[3px] border-[#bc8540] bg-[#fffefa] p-[18px]">
           <h3 class="mb-2 text-[1.12rem] font-bold">Primera forma normal (1FN)</h3>
-          <p class="mb-4 last:mb-0">Cada atributo guarda un valor individual. Las capacidades, convocatorias, escenas programadas y repartos se registran en filas propias, sin listas de identificadores en una celda.</p>
+          <p class="mb-4 last:mb-0">Cada atributo guarda un valor individual. Los estados de asistencia son valores simples y cada convocatoria almacena como máximo un id_sustituto (NULL o un identificador), sin listas de sustitutos en una celda.</p>
         </article>
         <article class="border-t-[3px] border-[#bc8540] bg-[#fffefa] p-[18px]">
           <h3 class="mb-2 text-[1.12rem] font-bold">Segunda forma normal (2FN)</h3>
-          <p class="mb-4 last:mb-0">Los atributos dependen de la clave completa de su tabla. Las observaciones de una convocatoria o un reparto describen esa asignación concreta, no al participante en general.</p>
+          <p class="mb-4 last:mb-0">Los atributos dependen de la clave completa de su tabla. En CONVOCATORIAS_ACTORES, el estado de asistencia y el sustituto dependen de la convocatoria identificada por la clave compuesta completa; no de una parte de ella.</p>
         </article>
         <article class="border-t-[3px] border-[#bc8540] bg-[#fffefa] p-[18px]">
           <h3 class="mb-2 text-[1.12rem] font-bold">Tercera forma normal (3FN)</h3>
-          <p class="mb-4 last:mb-0">Los datos personales solo se guardan en PARTICIPANTES. Los datos de personajes, especialidades, escenas y sesiones permanecen en sus propias tablas, sin dependencias transitivas de atributos no clave respecto de las claves.</p>
+          <p class="mb-4 last:mb-0">Los datos personales solo se guardan en PARTICIPANTES; id_sustituto referencia al actor autorizado sin repetir su nombre ni sus datos personales. Los datos de personajes, especialidades, escenas y sesiones permanecen en sus propias tablas, sin dependencias transitivas de atributos no clave respecto de las claves.</p>
         </article>
       </div>
     </details>
@@ -470,7 +546,7 @@ donde
         <p class="mb-4 last:mb-0"><strong>Identificadores estables:</strong> cada entidad principal tiene una clave primaria propia. Los nombres de las personas no se utilizan como identificadores, porque pueden repetirse o cambiar.</p>
         <p class="mb-4 last:mb-0"><strong>Una responsabilidad por tabla:</strong> las capacidades indican qué puede hacer cada participante; las convocatorias indican qué debe preparar en un ensayo; los repartos indican qué hará en una representación.</p>
         <p class="mb-4 last:mb-0"><strong>Relaciones explícitas:</strong> las FK compuestas validan las parejas actor–personaje y técnico–especialidad. ENSAYOS_ESCENAS conecta directamente con ambas entidades, sin un segundo camino que duplique la relación.</p>
-        <p class="mb-4 last:mb-0"><strong>Reglas de negocio claras:</strong> cada personaje tiene un intérprete por representación. Un actor puede interpretar varios personajes y un técnico puede desempeñar varias especialidades. No se guarda tipo_participante: se obtiene de la pertenencia a los subtipos.</p>
+        <p class="mb-4 last:mb-0"><strong>Reglas de negocio claras:</strong> cada personaje tiene un intérprete por representación y un actor puede interpretar varios personajes en la misma función. Un técnico puede tener varias especialidades como capacidades, pero solo desempeña una por representación; esa misma especialidad puede estar asignada a varios técnicos. Una persona puede actuar y ejercer una función técnica en la misma representación. No se guarda tipo_participante: se obtiene de la pertenencia a los subtipos.</p>
         <p class="mb-0"><strong>Documentación coherente:</strong> mantener los mismos nombres, atributos y relaciones en el Diagrama Entidad-Relación y en el Modelo Relacional, actualizando ambos cuando crezca el proyecto.</p>
       </div>
     </details>
